@@ -3,6 +3,7 @@ import osPaths from 'https://deno.land/x/os_paths@v7.4.0/src/mod.deno.ts'
 import { ensureFile } from "https://deno.land/std@0.190.0/fs/ensure_file.ts";
 import { keypress, KeyPressEvent } from "https://deno.land/x/cliffy@v0.25.7/keypress/mod.ts"
 import ennemies from 'https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/ennemies.json' assert { type: "json" }
+import options from 'https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/options.json' assert { type: "json" }
 import heroes from 'https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/heroes.json' assert { type: "json" }
 import dialogues from 'https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/dialogues.json' assert { type: "json" }
 
@@ -279,8 +280,7 @@ async function fighting() {
 
 
 async function firstLaunch() {
-    const firstLaunch = JSON.parse(await Deno.readTextFile(`${gameHome}` + 'JSONs/options.json'))
-    if (firstLaunch.alreadyLaunched === false) {
+    if (options.alreadyLaunched === false) {
         await animateText(`It looks like it's the first time you launch the game, welcome! \n`)
         await sleep(1000)
         console.clear()
@@ -308,7 +308,7 @@ async function firstLaunch() {
             console.clear()
             mainMenu()
         }
-        firstLaunch.alreadyLaunched = true
+        options.alreadyLaunched = true
         await jsonWrite({ alreadyLaunched: true, textIndex: 0 }, `${gameHome}` + 'JSONs/options.json')
     } else {
         await mainMenu()
