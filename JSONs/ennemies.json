@@ -1,0 +1,17 @@
+[
+    {
+        "name": "Slime",
+        "hp": 20,
+        "speed": 0,
+        "strengh": 2,
+        "xp": 10
+
+    },
+    {
+        "name": "Golem",
+        "hp": 50,
+        "speed": -1,
+        "strengh": 3,
+        "xp": 15
+    }
+]
