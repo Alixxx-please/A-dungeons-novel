@@ -6,6 +6,7 @@ import ennemies from 'https://raw.githubusercontent.com/Alixxx-please/A-dungeons
 import options from 'https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/options.json' assert { type: "json" }
 import heroes from 'https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/heroes.json' assert { type: "json" }
 import dialogues from 'https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/dialogues.json' assert { type: "json" }
+import { copy } from "https://deno.land/std@0.190.0/fs/copy.ts";
 
 
 
@@ -32,7 +33,6 @@ ensureFile(`${gameHome}` + 'JSONs/dialogues.json')
 ensureFile(`${gameHome}` + 'JSONs/ennemies.json')
 ensureFile(`${gameHome}` + 'JSONs/heroes.json')
 ensureFile(`${gameHome}` + 'JSONs/options.json')
-
 //-------------------------------------------fin variables---------------------------------
 
 
@@ -281,6 +281,10 @@ async function fighting() {
 
 async function firstLaunch() {
     if (options.alreadyLaunched === false) {
+        copy('https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/dialogues.json', `${gameHome}` + 'JSONs/dialogues.json')
+        copy('https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/ennemies.json', `${gameHome}` + 'JSONs/ennemies.json')
+        copy('https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/heroes.json', `${gameHome}` + 'JSONs/heroes.json')
+        copy('https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/options.json', `${gameHome}` + 'JSONs/options.json')
         await animateText(`It looks like it's the first time you launch the game, welcome! \n`)
         await sleep(1000)
         console.clear()
