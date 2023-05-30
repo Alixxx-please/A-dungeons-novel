@@ -2,9 +2,9 @@ import { Select } from "https://deno.land/x/cliffy@v0.25.7/prompt/select.ts"
 import osPaths from 'https://deno.land/x/os_paths@v7.4.0/src/mod.deno.ts'
 import { ensureFile } from "https://deno.land/std@0.190.0/fs/ensure_file.ts";
 import { keypress, KeyPressEvent } from "https://deno.land/x/cliffy@v0.25.7/keypress/mod.ts"
-import ennemies from './JSONs/ennemies.json' assert { type: "json" }
-import heroes from './JSONs/heroes.json' assert { type: "json" }
-import dialogues from './JSONs/dialogues.json' assert { type: "json" }
+import ennemies from 'https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/ennemies.json' assert { type: "json" }
+import heroes from 'https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/heroes.json' assert { type: "json" }
+import dialogues from 'https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/dialogues.json' assert { type: "json" }
 
 
 
