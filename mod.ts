@@ -1,12 +1,12 @@
 import { Select } from "https://deno.land/x/cliffy@v0.25.7/prompt/select.ts"
 import osPaths from 'https://deno.land/x/os_paths@v7.4.0/src/mod.deno.ts'
-import { ensureFile } from "https://deno.land/std@0.190.0/fs/ensure_file.ts";
 import { keypress, KeyPressEvent } from "https://deno.land/x/cliffy@v0.25.7/keypress/mod.ts"
 import ennemies from 'https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/ennemies.json' assert { type: "json" }
 import options from 'https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/options.json' assert { type: "json" }
 import heroes from 'https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/heroes.json' assert { type: "json" }
 import dialogues from 'https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/dialogues.json' assert { type: "json" }
-import { copy } from "https://deno.land/std@0.190.0/fs/copy.ts";
+import { exists } from "https://deno.land/std@0.190.0/fs/exists.ts";
+import { ensureFile } from "https://deno.land/std@0.190.0/fs/ensure_file.ts";
 
 
 
@@ -28,12 +28,45 @@ interface Dialogues {
     [key: string]: string[];
 }
 const dialoguesTyped: Dialogues = dialogues
-
-ensureFile(`${gameHome}` + 'JSONs/dialogues.json')
-ensureFile(`${gameHome}` + 'JSONs/ennemies.json')
-ensureFile(`${gameHome}` + 'JSONs/heroes.json')
-ensureFile(`${gameHome}` + 'JSONs/options.json')
 //-------------------------------------------fin variables---------------------------------
+
+async function installAll() {
+    if(!await exists(`${gameHome}` + 'JSONs/dialogues.json')) {
+        ensureFile(`${gameHome}` + 'JSONs/dialogues.json')
+
+        const dialogues = await fetch('https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/dialogues.json')
+        const dialoguesJson = await dialogues.json()
+
+        await Deno.writeTextFile(`${gameHome}` + 'JSONs/dialogues.json', JSON.stringify(dialoguesJson, null, '\t'))
+    }
+    
+    if(!await exists(`${gameHome}` + 'JSONs/ennemies.json')) {
+        ensureFile(`${gameHome}` + 'JSONs/ennemies.json')
+
+        const ennemies = await fetch('https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/ennemies.json')
+        const ennemiesJson = await ennemies.json()
+
+    await Deno.writeTextFile(`${gameHome}` + 'JSONs/ennemies.json', JSON.stringify(ennemiesJson, null, '\t'))
+    }
+    
+    if(!await exists(`${gameHome}` + 'JSONs/heroes.json')) {
+        ensureFile(`${gameHome}` + 'JSONs/heroes.json')
+
+        const heroes = await fetch('https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/heroes.json')
+        const heroesJson = await heroes.json()
+
+        await Deno.writeTextFile(`${gameHome}` + 'JSONs/heroes.json', JSON.stringify(heroesJson, null, '\t'))
+    }
+    
+    if(!await exists(`${gameHome}` + 'JSONs/options.json')) {
+        ensureFile(`${gameHome}` + 'JSONs/options.json')
+
+        const options = await fetch('https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/options.json')
+        const optionsJson = await options.json()
+
+        await Deno.writeTextFile(`${gameHome}` + 'JSONs/options.json', JSON.stringify(optionsJson, null, '\t'))
+    }
+}
 
 
 function sleep(ms: number) {
@@ -186,13 +219,8 @@ async function mainMenu() {
         }
         
         if (insideOptions == 'reset') {
-            jsonWrite({ alreadyLaunched: false, textIndex: 0 }, `${gameHome}` + 'JSONs/options.json')
-            jsonWrite({
-                hp: 10,
-                speed: 1,
-                strengh: 200,
-                xp: 0
-            }, `${gameHome}` + 'JSONs/heroes.json')
+            await installAll()
+            await firstLaunch()
         }
     }
 
@@ -280,11 +308,7 @@ async function fighting() {
 
 
 async function firstLaunch() {
-    if (options.alreadyLaunched === false) {
-        copy('https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/dialogues.json', `${gameHome}` + 'JSONs/dialogues.json')
-        copy('https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/ennemies.json', `${gameHome}` + 'JSONs/ennemies.json')
-        copy('https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/heroes.json', `${gameHome}` + 'JSONs/heroes.json')
-        copy('https://raw.githubusercontent.com/Alixxx-please/A-dungeons-novel/main/JSONs/options.json', `${gameHome}` + 'JSONs/options.json')
+    if (options.alreadyLaunched == false) {
         await animateText(`It looks like it's the first time you launch the game, welcome! \n`)
         await sleep(1000)
         console.clear()
@@ -313,7 +337,7 @@ async function firstLaunch() {
             mainMenu()
         }
         options.alreadyLaunched = true
-        await jsonWrite({ alreadyLaunched: true, textIndex: 0 }, `${gameHome}` + 'JSONs/options.json')
+        await jsonWrite({ language: language, alreadyLaunched: true, textIndex: 0 }, `${gameHome}` + 'JSONs/options.json')
     } else {
         await mainMenu()
     }
@@ -324,5 +348,5 @@ async function firstLaunch() {
 
 
 
-
+await installAll()
 await firstLaunch()
